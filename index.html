@@ -441,20 +441,20 @@
     <script>
         // Default initial Gang Roster Data
         const defaultMembers = [
-            { id: "1", name: "❰ BK ❱ Luca_Clinton", rank: "Leader" },
-            { id: "2", name: "❰ BK ❱ Saki_Clinton", rank: "Co-Leader" },
+            { id: "1", name: "❰ BK ❱ Luca_Clinton", rank: "Leader", avatar: "members/earth.jpg" },
+            { id: "2", name: "❰ BK ❱ Saki_Clinton", rank: "Co-Leader", avatar: "members/earth.jpg" },
             { id: "3", name: "❰ BK ❱ Eath_Dek", rank: "Co-Leader", avatar: "members/earth.jpg" },
-            { id: "4", name: "❰ BK ❱ Fried_Egg", rank: "Member" },
-            { id: "5", name: "❰ BK ❱ Taya_Silver", rank: "Member" },
-            { id: "6", name: "❰ BK ❱ Fxing_Soblack", rank: "Member" },
-            { id: "7", name: "❰ BK ❱ Phana_Phmoxy", rank: "Member" },
-            { id: "8", name: "❰ BK ❱ Nonny_Contour", rank: "Member" },
-            { id: "9", name: "❰ BK ❱ Toka_Silver", rank: "Member" },
-            { id: "10", name: "❰ BK ❱ Martin_Chen", rank: "Member" },
-            { id: "11", name: "❰ BK ❱ Dew_Chickenstep", rank: "Member" },
-            { id: "12", name: "❰ BK ❱ Miro_Ranri", rank: "Member" },
-            { id: "13", name: "❰ BK ❱ Bungjack_Stepmor", rank: "Member", avatar: "members/n.jpg" },
-            { id: "14", name: "❰ BK ❱ Jokerx_Owan", rank: "Member" }
+            { id: "4", name: "❰ BK ❱ Fried_Egg", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "5", name: "❰ BK ❱ Taya_Silver", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "6", name: "❰ BK ❱ Fxing_Soblack", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "7", name: "❰ BK ❱ Phana_Phmoxy", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "8", name: "❰ BK ❱ Nonny_Contour", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "9", name: "❰ BK ❱ Toka_Silver", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "10", name: "❰ BK ❱ Martin_Chen", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "11", name: "❰ BK ❱ Dew_Chickenstep", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "12", name: "❰ BK ❱ Miro_Ranri", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "13", name: "❰ BK ❱ Bungjack_Stepmor", rank: "Member", avatar: "members/earth.jpg" },
+            { id: "14", name: "❰ BK ❱ Jokerx_Owan", rank: "Member", avatar: "members/earth.jpg" }
         ];
 
         // State variables
@@ -479,10 +479,14 @@
             if (saved) {
                 try {
                     members = JSON.parse(saved);
-                    if (members[0] && !members[0].avatar) {
-                        members[0].avatar = 'members/earth.jpg';
-                        saveMembersToStorage();
-                    }
+                    let membersUpdated = false;
+                    members.forEach(member => {
+                        if (!member.avatar) {
+                            member.avatar = 'members/earth.jpg';
+                            membersUpdated = true;
+                        }
+                    });
+                    if (membersUpdated) saveMembersToStorage();
                 } catch (e) {
                     members = [...defaultMembers];
                 }
