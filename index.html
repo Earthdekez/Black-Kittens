@@ -441,7 +441,7 @@
     <script>
         // Default initial Gang Roster Data
         const defaultMembers = [
-            { id: "1", name: "❰ BK ❱ Luca_Clinton", rank: "Leader" },
+            { id: "1", name: "❰ BK ❱ Luca_Clinton", rank: "Leader", avatar: "members/earth.jpg" },
             { id: "2", name: "❰ BK ❱ Saki_Clinton", rank: "Co-Leader" },
             { id: "3", name: "❰ BK ❱ Eath_Dek", rank: "Co-Leader" },
             { id: "4", name: "❰ BK ❱ Fried_Egg", rank: "Member" },
@@ -479,6 +479,10 @@
             if (saved) {
                 try {
                     members = JSON.parse(saved);
+                    if (members[0] && !members[0].avatar) {
+                        members[0].avatar = 'members/earth.jpg';
+                        saveMembersToStorage();
+                    }
                 } catch (e) {
                     members = [...defaultMembers];
                 }
