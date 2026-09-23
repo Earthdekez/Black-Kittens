@@ -276,6 +276,11 @@
                         <label for="input-avatar" class="block text-xs text-gray-400 mb-1 font-semibold">URL รูปสมาชิก (ทุกคนจะเห็นรูปนี้)</label>
                         <input type="text" id="input-avatar" placeholder="members/luca.jpg หรือ https://.../member.jpg" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-bkRed">
                     </div>
+
+                    <div class="sm:col-span-12">
+                        <label for="input-contact" class="block text-xs text-gray-400 mb-1 font-semibold">ช่องทางติดต่อสมาชิก</label>
+                        <input type="text" id="input-contact" placeholder="Discord, เบอร์โทร หรือช่องทางติดต่ออื่น" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-bkRed">
+                    </div>
                 </form>
 
                 <form id="rule-form" onsubmit="handleRuleSubmit(event)" class="mt-5 border-t border-bkRed/30 pt-4">
@@ -639,6 +644,7 @@
                                     ${rankBadge}
                                 </div>
                                 <h4 class="font-bold text-white text-base truncate tracking-wide">${escapeHtml(member.name)}</h4>
+                                <p class="text-xs text-gray-500 truncate mt-1"><i class="fa-solid fa-address-book mr-1"></i>${escapeHtml(member.contact || 'ยังไม่ระบุช่องทางติดต่อ')}</p>
                             </div>
                         </div>
 
@@ -704,12 +710,13 @@
             const nameInput = document.getElementById('input-name').value.trim();
             const rankInput = document.getElementById('input-rank').value;
             const avatarInput = document.getElementById('input-avatar').value.trim();
+            const contactInput = document.getElementById('input-contact').value.trim();
 
             if (!nameInput) return;
 
             if (editId) {
                 // Edit existing member
-                members = members.map(m => m.id === editId ? { ...m, name: nameInput, rank: rankInput, avatar: avatarInput } : m);
+                members = members.map(m => m.id === editId ? { ...m, name: nameInput, rank: rankInput, avatar: avatarInput, contact: contactInput } : m);
                 showToast('อัปเดตข้อมูลสมาชิกเรียบร้อย');
             } else {
                 // Add new member
@@ -717,7 +724,8 @@
                     id: Date.now().toString(),
                     name: nameInput,
                     rank: rankInput,
-                    avatar: avatarInput
+                    avatar: avatarInput,
+                    contact: contactInput
                 };
                 members.push(newMember);
                 showToast('เพิ่มสมาชิกใหม่เรียบร้อย');
@@ -736,6 +744,7 @@
             document.getElementById('input-name').value = member.name;
             document.getElementById('input-rank').value = member.rank;
             document.getElementById('input-avatar').value = member.avatar || '';
+            document.getElementById('input-contact').value = member.contact || '';
             
             document.getElementById('btn-text').innerText = 'บันทึกการแก้ไข';
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
