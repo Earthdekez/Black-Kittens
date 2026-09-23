@@ -274,7 +274,7 @@
 
                     <div class="sm:col-span-12">
                         <label for="input-avatar" class="block text-xs text-gray-400 mb-1 font-semibold">URL รูปสมาชิก (ทุกคนจะเห็นรูปนี้)</label>
-                        <input type="url" id="input-avatar" placeholder="https://.../member.jpg" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-bkRed">
+                        <input type="text" id="input-avatar" placeholder="members/luca.jpg หรือ https://.../member.jpg" class="w-full bg-zinc-900/90 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-bkRed">
                     </div>
                 </form>
 
@@ -561,6 +561,21 @@
             showToast('เปลี่ยนรหัส Dev เรียบร้อย');
         }
 
+        function resolveAvatarUrl(value) {
+            const avatarUrl = String(value || '').trim();
+            if (!avatarUrl) return '';
+            try {
+                const parsedUrl = new URL(avatarUrl, window.location.href);
+                if (parsedUrl.hostname === 'github.com') {
+                    const blobPath = parsedUrl.pathname.match(/^\/([^/]+)\/([^/]+)\/blob\/(.+)$/);
+                    if (blobPath) return `https://raw.githubusercontent.com/${blobPath[1]}/${blobPath[2]}/${blobPath[3]}`;
+                }
+                return parsedUrl.href;
+            } catch (error) {
+                return avatarUrl;
+            }
+        }
+
         // Render Member Cards
         function renderMembers() {
             const grid = document.getElementById('members-grid');
@@ -590,8 +605,9 @@
             grid.innerHTML = filtered.map((member, index) => {
                 const isLeader = member.rank === 'Leader';
                 const isCoLeader = member.rank === 'Co-Leader';
-                const avatar = member.avatar
-                    ? `<img src="${escapeHtml(member.avatar)}" alt="${escapeHtml(member.name)}" class="w-full h-full object-cover rounded-xl">`
+                const avatarUrl = resolveAvatarUrl(member.avatar);
+                const avatar = avatarUrl
+                    ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(member.name)}" class="w-full h-full object-cover rounded-xl" onerror="this.onerror=null; this.src='bk.png';">`
                     : `<i class="fa-solid ${isLeader ? 'fa-user-ninja' : (isCoLeader ? 'fa-user-shield' : 'fa-user-large')}"></i>`;
                 
                 let rankBadge = '';
